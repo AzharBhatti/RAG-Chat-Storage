@@ -8,10 +8,10 @@ spring:
     whitelabel:
       enabled: false
   datasource:
-    url: jdbc:postgresql://postgres:5432/chatdb  # Make sure the host is correct (use "localhost" if running locally)
+    url: jdbc:postgresql://postgres:5432/chatdb
     username: chatuser
     password: chatpass
-    driver-class-name: org.postgresql.Driver  # Add driver class name if needed
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -19,11 +19,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect  # Specify the PostgreSQL dialect here
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   data:
     jpa:
       repository:
-        base-package: com.chat.storage.repository  # If you have a custom base package for your repositories
+        base-package: com.chat.storage.repository
 
 app:
   api-key: ${API_KEY:supersecret}
@@ -35,3 +35,19 @@ springdoc:
     enabled: true
     server-url: http://localhost:8096
     path: /swagger-ui.html
+
+resilience4j.ratelimiter:
+  instances:
+    apiRateLimiter:
+      limitForPeriod: 10        # Max requests per period
+      limitRefreshPeriod: 1s    # Time window to allow the requests
+      timeoutDuration: 500ms    # Timeout for the request if rate limit is reached
+
+logging:
+  level:
+    root: INFO
+    com.chat.storage: DEBUG
+  logback:
+    # If you want to customize the file appender or other settings
+    file:
+      name: logs/app.log

@@ -13,10 +13,27 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:8095"); // Allow this origin
-        config.addAllowedMethod("*"); // Allow all methods (GET, POST, etc.)
-        config.addAllowedHeader("*"); // Allow all headers
+
+        // Allow only specific origins
+        config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOrigin("http://localhost:8096");
+
+        // Allow specific HTTP methods (GET, POST, PUT, DELETE)
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("DELETE");
+
+        // Allow specific headers (e.g., Authorization, Content-Type)
+        config.addAllowedHeader("Authorization");
+        config.addAllowedHeader("Content-Type");
+
+        // Allow credentials (cookies, authentication)
+        config.setAllowCredentials(true);
+
+        // Register CORS configuration for all endpoints
         source.registerCorsConfiguration("/**", config);
+
         return source;
     }
 }

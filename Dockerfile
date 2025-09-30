@@ -1,4 +1,7 @@
 FROM openjdk:17-jdk-slim
+
+ENV API_KEY=777771111
+
 WORKDIR /app
 COPY target/ms-chat-storage-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-jar","app.jar"]

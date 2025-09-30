@@ -11,6 +11,10 @@ import com.chat.storage.repository.ChatSessionRepository;
 import com.chat.storage.repository.MessageRepository;
 import com.chat.storage.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -84,10 +88,9 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<MessageResponse> getMessagesBySession(UUID sessionId) {
-        List<MessageEntity> messages = chatMessageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId);
-        return messages.stream()
-                .map(MessageResponse::new)
-                .collect(Collectors.toList());
+    public Page<MessageResponse> getMessagesBySession(UUID sessionId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
+        Page<MessageEntity> messages = chatMessageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId, pageable);
+        return messages.map(MessageResponse::new);
     }
 }
